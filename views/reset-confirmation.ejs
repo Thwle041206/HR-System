@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Reset Password</title>
+  <link rel="stylesheet" href="/stylesheets/normalize.css" />
+  <link rel="stylesheet" href="/stylesheets/login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="login-container">
+    <div class="login-form reset-confirmation-form">
+      <h1><span class="reset-title">Reset Password</span></h1>
+      
+      <div class="confirmation-message">
+        <p class="thank-you">Thank you!</p>
+        <p class="instructions">Please check your email for further instructions.</p>
+      </div>
+      
+      <div class="reset-options">
+        <p class="no-email">Didn't get the reset email?</p>
+        
+        <div class="button-group">
+          <form action="/resend-reset" method="post">
+            <input type="hidden" name="email" value="<%= email %>" />
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button type="submit" class="btn-submit">Resend</button>
+          </form>
+          <button type="button" class="btn-cancel" onclick="window.location.href='/'">Cancel</button>
+        </div>
+      </div>
+      
+      <div class="help-center">
+        <span>Need help? Contact to <a href="/help" class="help-link">Admin</a></span>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html> 

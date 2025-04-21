@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/header') %>
+
+  <body>
+    <nav class="navbar navbar-default no-margin">
+      <!-- Brand and toggle get grouped for better mobile display -->
+
+      <div class="navbar-header fixed-brand">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
+          <span class="glyphicon glyphicon-th-large" style="margin-left: 5px" aria-hidden="true"></span>
+        </button>
+        <a class="navbar-brand" href="#"><i class="fa fa-a fa-4"></i>
+          <%= userName %>
+        </a>
+      </div>
+      <!-- navbar-header-->
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2">
+              <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+            </button>
+          </li>
+          <li class="navbar-brand">
+            <form action="/logout" method="get">
+              <button id="logout" type="submit" style="margin-top: -3px" class="btn btn-default">
+                <i class="fa fa-user" aria-hidden="true"></i> Logout
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      <!-- bs-example-navbar-collapse-1 -->
+    </nav>
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+        <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+          <li>
+            <a href="/admin/"><span class="fa-stack fa-lg pull-left"><i
+                      class="fa fa-tachometer fa-stack-1x"></i></span> Dashboard</a>
+          </li>
+          <li>
+            <a href="#" id="menu3"><span class="fa-stack fa-lg pull-left"><i class="fa fa-users fa-stack-1x"></i></span>
+              Employees</a>
+            <ul class="nav-pills nav-stacked" style="list-style-type: none">
+              <li>
+                <a href="/admin/view-all-employees"><span class="fa-stack fa-lg pull-left"><i
+                      class="fa fa-eye fa-stack-1x"></i></span> View Employees</a>
+              </li>
+              <li>
+                <a href="/admin/add-employee"><span class="fa-stack fa-lg pull-left"><i
+                      class="fa fa-plus fa-stack-1x"></i></span> Add Employees</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="/admin/leave-applications"><span class="fa-stack fa-lg pull-left"><i
+                  class="fa fa-envelope-square fa-stack-1x"></i></span>
+              Leave Applications</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);" onclick="$('#myModal').modal('show'); return false;"><span class="fa-stack fa-lg pull-left"><i
+                  class="fa fa-list-ol fa-stack-1x"></i></span> View Attendance</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);" onclick="$('#myModal2').modal('show'); return false;"><span class="fa-stack fa-lg pull-left"><i
+                class="fa fa-check-circle fa-stack-1x"></i></span> Mark Attendance</a>
+          </li>
+          <li>
+            <a href="/admin/view-profile"><span class="fa-stack fa-lg pull-left"><i
+                  class="fa fa-user fa-stack-1x"></i></span> View Profile</a>
+          </li>
+        </ul>
+      </div>
+      <!-- /#sidebar-wrapper -->
+      
+      <!-- Page Content -->
+      <div id="page-content-wrapper">
+        <div class="container-fluid xyz">
+          <div class="row">
+            <div class="col-lg-12">
+              <!-- Modern Dashboard Header -->
+              <div class="dashboard-header">
+                <div class="header-title">
+                  <h1><i class="fa fa-angle-right"></i> Admin Dashboard</h1>
+                  <p class="current-date">
+                    <span class="day-name">Wednesday</span> 
+                    <span class="date-text" id="currentDate">20th of April 2025 08:00:33 AM</span>
+                  </p>
+                </div>
+                
+                <div class="date-selector">
+                  <div class="btn-group">
+                    <button class="btn btn-dark date-selector-btn" id="calendarBtn" type="button">
+                      <i class="fa fa-calendar"></i> <span id="selectedMonth">April, 2025</span> <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div id="calendar-container" class="calendar-dropdown">
+                      <div id="dashboard-calendar"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Dashboard Cards -->
+              <div class="row dashboard-stats">
+                <!-- Employees Card -->
+                <div class="col-md-3">
+                  <div class="stat-card employee-card">
+                    <div class="stat-card-body">
+                      <div class="stat-card-icon">
+                        <i class="fa fa-users"></i>
+                      </div>
+                      <div class="stat-card-info">
+                        <div class="stat-card-number">
+                          <%= totalEmployees %>
+                        </div>
+                        <div class="stat-card-title">
+                          Total Employees
+                        </div>
+                      </div>
+                    </div>
+                    <div class="stat-card-footer">
+                      <a href="/admin/view-all-employees" class="view-details-btn">
+                        <span>View Detail</span> <i class="fa fa-arrow-circle-right"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Managers Card -->
+                <div class="col-md-3">
+                  <div class="stat-card manager-card">
+                    <div class="stat-card-body">
+                      <div class="stat-card-icon">
+                        <i class="fa fa-user-secret"></i>
+                      </div>
+                      <div class="stat-card-info">
+                        <div class="stat-card-number">
+                          <%= totalManagers %>
+                        </div>
+                        <div class="stat-card-title">
+                          Total Managers
+                        </div>
+                      </div>
+                    </div>
+                    <div class="stat-card-footer">
+                      <a href="/admin/view-all-employees" class="view-details-btn">
+                        <span>View Detail</span> <i class="fa fa-arrow-circle-right"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Projects Card -->
+                <div class="col-md-3">
+                  <div class="stat-card project-card">
+                    <div class="stat-card-body">
+                      <div class="stat-card-icon">
+                        <i class="fa fa-tasks"></i>
+                      </div>
+                      <div class="stat-card-info">
+                        <div class="stat-card-number">
+                          <%= totalProjects %>
+                        </div>
+                        <div class="stat-card-title">
+                          Total Projects
+                        </div>
+                      </div>
+                    </div>
+                    <div class="stat-card-footer">
+                      <a href="/admin/view-all-employees" class="view-details-btn">
+                        <span>View Detail</span> <i class="fa fa-arrow-circle-right"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Attendance Card -->
+                <div class="col-md-3">
+                  <div class="stat-card attendance-card">
+                    <div class="stat-card-body">
+                      <div class="stat-card-icon">
+                        <i class="fa fa-check-circle"></i>
+                      </div>
+                      <div class="stat-card-info">
+                        <div class="stat-card-number">
+                          <%= todayAttendance %>
+                        </div>
+                        <div class="stat-card-title">
+                          Today's Attendance
+                        </div>
+                      </div>
+                    </div>
+                    <div class="stat-card-footer">
+                      <a href="/admin/view-attendance-current" class="view-details-btn">
+                        <span>View Detail</span> <i class="fa fa-arrow-circle-right"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Information Panels -->
+              <div class="row dashboard-panels">
+                <!-- Leave Applications Overview -->
+                <div class="col-md-6">
+                  <div class="panel custom-panel">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">
+                        <i class="fa fa-calendar"></i> Leave Applications Overview
+                      </h3>
+                    </div>
+                    <div class="panel-body">
+                      <ul class="application-list">
+                        <li>
+                          <a href="/admin/leave-applications">
+                            <i class="fa fa-clock-o"></i> 
+                            <span class="app-text">Pending Leave Applications</span>
+                            <span class="badge"><%= pendingLeaves %></span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/admin/leave-applications">
+                            <i class="fa fa-calendar"></i> 
+                            <span class="app-text">Total Leave Applications</span>
+                            <span class="badge"><%= totalLeaves %></span>
+                          </a>
+                        </li>
+                      </ul>
+                      <div class="panel-footer text-right">
+                        <a href="/admin/leave-applications" class="view-all-link">
+                          View All <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="col-md-6">
+                  <div class="panel custom-panel">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">
+                        <i class="fa fa-rocket"></i> Quick Actions
+                      </h3>
+                    </div>
+                    <div class="panel-body">
+                      <ul class="quick-actions-list">
+                        <li>
+                          <a href="/admin/add-employee">
+                            <i class="fa fa-plus"></i> 
+                            <span class="action-text">Add New Employee</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="javascript:void(0);" onclick="$('#myModal2').modal('show'); return false;">
+                            <i class="fa fa-check"></i> 
+                            <span class="action-text">Mark Attendance</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="/admin/view-profile">
+                            <i class="fa fa-user"></i> 
+                            <span class="action-text">View Profile</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <header></header>
+    </div>
+    <div id="myModal2" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <form method="post" action="/admin/mark-attendance">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+              <h4 class="modal-title">Mark Attendance</h4>
+            </div>
+            <div class="modal-body">
+              <p>Are you sure you want to mark attendance.</p>
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button type="reset" class="btn btn-default" data-dismiss="modal">
+                No
+              </button>
+              <button type="submit" class="btn btn-default">Yes</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <form method="post" action="/admin/view-attendance">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+              <h4 class="modal-title">Select Month/Year</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="Month">Month:</label>
+                <select class="form-control" id="month" name="month">
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="year">Year:</label>
+                <select class="form-control" id="year" name="year"></select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button type="reset" class="btn btn-default" data-dismiss="modal">
+                Close
+              </button>
+              <button type="submit" class="btn btn-default">View</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+  <!-- /#wrapper -->
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.js" charset="UTF-8"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js" charset="UTF-8"></script>
+
+  <!-- Datepicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+  <script src="/javascripts/sidebar_menu.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Kiểm tra trạng thái sidebar khi trang tải
+      if ($("#wrapper").hasClass("toggled-2")) {
+        // Ẩn tất cả submenu
+        $('#menu ul').hide();
+        
+        // Đảm bảo các văn bản trong menu bị ẩn
+        $('.sidebar-nav li a span:not(.fa-stack)').css({
+            'display': 'none',
+            'visibility': 'hidden',
+            'width': '0',
+            'height': '0',
+            'opacity': '0'
+        });
+        
+        // Xử lý icon hiển thị
+        $('.sidebar-nav li a').css({
+            'text-align': 'center',
+            'padding': '10px 0',
+            'font-size': '0'
+        });
+        
+        $('.sidebar-nav .fa-stack, .sidebar-nav .fa-stack-1x').css({
+            'margin': '0 auto',
+            'font-size': '20px',
+            'width': '50px',
+            'display': 'inline-block',
+            'text-align': 'center'
+        });
+        
+        // Đảm bảo width của sidebar
+        $('#sidebar-wrapper').css({
+            'width': '50px',
+            'min-width': '50px',
+            'max-width': '50px'
+        });
+        
+        // Điều chỉnh lại page content
+        $('#page-content-wrapper').css({
+            'margin-left': '50px',
+            'width': 'calc(100% - 50px)'
+        });
+      }
+      
+      // Populate year dropdown
+      for (i = new Date().getFullYear(); i > 1950; i--) {
+        $("#year").append($("<option />").val(i).html(i));
+      }
+      
+      // Xử lý đặc biệt cho modal - KHÔNG loại bỏ các handler click
+      $('.modal').on('show.bs.modal', function (e) {
+        // Ngăn modal ảnh hưởng đến trạng thái active của menu
+        e.stopPropagation();
+      });
+      
+      // Calendar Functionality
+      var calendarVisible = false;
+      
+      // Initialize the datepicker
+      $('#dashboard-calendar').datepicker({
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+        todayHighlight: true,
+        startView: 'month',
+        maxViewMode: 'year',
+        container: '#calendar-container'
+      }).on('changeDate', function(e) {
+        // Format the selected date
+        var dateSelected = new Date(e.date);
+        var day = dateSelected.getDate();
+        var month = dateSelected.getMonth();
+        var year = dateSelected.getFullYear();
+        
+        var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                          'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        // Update the selectedMonth text
+        $('#selectedMonth').text(monthNames[month] + ', ' + year);
+        
+        // Hide the calendar after selection
+        $('#calendar-container').hide();
+        calendarVisible = false;
+        
+        // You can add AJAX request here to load data for the selected date
+        // Example: loadDayData(day, month, year);
+      });
+      
+      // Toggle calendar visibility on button click
+      $('#calendarBtn').click(function(e) {
+        e.stopPropagation();
+        if (calendarVisible) {
+          $('#calendar-container').hide();
+          calendarVisible = false;
+        } else {
+          $('#calendar-container').show();
+          calendarVisible = true;
+        }
+      });
+      
+      // Hide calendar when clicking outside
+      $(document).click(function() {
+        if (calendarVisible) {
+          $('#calendar-container').hide();
+          calendarVisible = false;
+        }
+      });
+      
+      // Prevent hiding when clicking on the calendar itself
+      $('#calendar-container').click(function(e) {
+        e.stopPropagation();
+      });
+      
+      // Load attendance data function (example)
+      function loadDayData(day, month, year) {
+        // You can implement AJAX request to load attendance data for the selected date
+        console.log("Loading data for: " + day + "/" + (month+1) + "/" + year);
+        // Example: $.ajax({ url: '/admin/get-attendance-data', data: { day: day, month: month, year: year } });
+      }
+      
+      // Cập nhật ngày tháng hiện tại
+      function updateCurrentDate() {
+        var now = new Date();
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        // Lấy ngày hiện tại
+        var dayName = days[now.getDay()];
+        var day = now.getDate();
+        var month = months[now.getMonth()];
+        var year = now.getFullYear();
+        
+        // Định dạng thời gian
+        var hours = now.getHours();
+        var minutes = (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+        var seconds = (now.getSeconds() < 10 ? '0' : '') + now.getSeconds();
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // Đổi 0 thành 12
+        
+        // Thêm hậu tố cho ngày
+        var daySuffix;
+        if (day > 3 && day < 21) daySuffix = 'th';
+        else {
+          switch (day % 10) {
+            case 1: daySuffix = 'st'; break;
+            case 2: daySuffix = 'nd'; break;
+            case 3: daySuffix = 'rd'; break;
+            default: daySuffix = 'th';
+          }
+        }
+        
+        // Cập nhật ngày và tháng năm
+        $('.day-name').text(dayName);
+        $('#currentDate').text(day + daySuffix + ' of ' + month + ' ' + year + ' ' + hours + ':' + minutes + ':' + seconds + ' ' + ampm);
+        if (!calendarVisible) {
+          $('#selectedMonth').text(month + ', ' + year);
+        }
+        
+        // Cập nhật mỗi giây
+        setTimeout(updateCurrentDate, 1000);
+      }
+      
+      // Khởi chạy cập nhật thời gian
+      updateCurrentDate();
+      
+      // Đảm bảo Dashboard luôn active khi trang tải xong
+      if (!$('#menu li:first').hasClass('active')) {
+        $('#menu li:first').addClass('active');
+      }
+    });
+  </script>
+  
+  <style>
+    /* Hoàn thiện CSS cho sidebar thu gọn */
+    /* CSS sau đây sẽ ghi đè hoàn toàn CSS của file style.css */
+    @media (min-width: 768px) {
+      /* Định nghĩa rõ ràng cho sidebar thu gọn */
+      #wrapper.toggled-2 #sidebar-wrapper {
+        width: 50px !important;
+        min-width: 50px !important;
+        max-width: 50px !important;
+      }
+      
+      /* Di chuyển page content khi sidebar thu gọn */
+      #wrapper.toggled-2 #page-content-wrapper {
+        margin-left: 50px !important;
+        width: calc(100% - 50px) !important;
+      }
+      
+      #wrapper.toggled-2 .sidebar-nav li a span:not(.fa-stack) {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        opacity: 0 !important;
+        overflow: hidden !important;
+      }
+      
+
+      #wrapper.toggled-2 .sidebar-nav li a {
+        text-align: center !important;
+        padding: 10px 0 !important;
+        font-size: 0 !important;
+      }
+      
+      #wrapper.toggled-2 .sidebar-nav .fa-stack,
+      #wrapper.toggled-2 .sidebar-nav .fa-stack-1x {
+        margin: 0 auto !important;
+        font-size: 20px !important;
+        width: 50px !important;
+        display: inline-block !important;
+        text-align: center !important;
+      }
+      
+      /* Ẩn submenu khi thu gọn */
+      #wrapper.toggled-2 #menu ul {
+        display: none !important;
+      }
+      
+      /* Đảm bảo width sidebar không bị ghi đè */
+      #wrapper.toggled-2.toggled #sidebar-wrapper {
+        width: 50px !important;
+      }
+    }
+    
+    /* Thêm animation để chuyển đổi mượt mà */
+    #sidebar-wrapper, #page-content-wrapper {
+      transition: all 0.3s ease-in-out !important;
+    }
+    
+    /* Dashboard Header */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      border-bottom: 2px solid #eee;
+      background-color: #fafafa;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .header-title h1 {
+      margin-top: 0;
+      font-weight: 600;
+      font-size: 24px;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    
+    .current-date {
+      color: #777;
+      margin: 0;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .day-name {
+      font-weight: bold;
+      color: #333;
+      font-size: 16px;
+    }
+    
+    .date-selector {
+      position: relative;
+    }
+    
+    .date-selector-btn {
+      background-color: #343a40;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+    }
+    
+    .calendar-dropdown {
+      position: absolute;
+      right: 0;
+      top: 40px;
+      z-index: 1000;
+      display: none;
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      padding: 10px;
+    }
+    
+    /* Fix for datepicker styles */
+    .datepicker {
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    
+    .datepicker table tr td.active,
+    .datepicker table tr td.active:hover,
+    .datepicker table tr td.active.disabled,
+    .datepicker table tr td.active.disabled:hover {
+      background-color: #007bff !important;
+      background-image: none;
+    }
+    
+    .datepicker table tr td.today {
+      background-color: #ffdb99 !important;
+      background-image: none;
+    }
+    
+    .datepicker .datepicker-switch:hover,
+    .datepicker .prev:hover,
+    .datepicker .next:hover,
+    .datepicker tfoot tr th:hover {
+      background: #f8f9fa;
+    }
+    
+    /* Dashboard Stats Cards */
+    .dashboard-stats {
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    
+    .stat-card-body {
+      padding: 20px 20px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      min-height: 100px;
+      position: relative;
+      justify-content: flex-start;
+      color: white;
+    }
+    
+    .stat-card-icon {
+      width: 65px;
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.25);
+      margin-right: 20px;
+      margin-left: 0;
+      border: 1px solid rgba(255,255,255,0.4);
+      flex-shrink: 0;
+    }
+    
+    .stat-card-icon i {
+      font-size: 28px;
+      color: white;
+      opacity: 0.9;
+    }
+    
+    .stat-card-info {
+      flex: 1;
+      text-align: right;
+      padding-right: 10px;
+    }
+    
+    .stat-card-number {
+      font-size: 36px;
+      font-weight: bold;
+      line-height: 1;
+      display: block;
+      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+    }
+    
+    .stat-card-title {
+      font-size: 15px;
+      display: block;
+      font-weight: 500;
+      opacity: 0.95;
+      letter-spacing: 0.3px;
+    }
+    
+    .stat-card-footer {
+      background-color: white;
+      padding: 10px 15px;
+      text-align: right;
+      border-top: 2px solid rgba(0,0,0,0.05);
+    }
+    
+    .view-details-btn {
+      color: #444;
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
+      gap: 8px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    
+    .view-details-btn:hover {
+      color: #333;
+      text-decoration: none;
+    }
+    
+    .view-details-btn span {
+      line-height: 1.2;
+    }
+    
+    .view-details-btn i {
+      font-size: 16px;
+      margin-left: 0;
+    }
+    
+    /* Card Colors */
+    .employee-card .stat-card-body {
+      background-color: #321FAA; /* Deep purple-blue */
+      border-bottom: 3px solid #1b106b;
+    }
+    
+    .manager-card .stat-card-body {
+      background-color: #50BFFF; /* Light blue */
+      border-bottom: 3px solid #0e8ad9;
+    }
+    
+    .project-card .stat-card-body {
+      background-color: #C9D64F; /* Yellow-green */
+      border-bottom: 3px solid #a8b52d;
+    }
+    
+    .attendance-card .stat-card-body {
+      background-color: #8BC34A; /* Light Green */
+      border-bottom: 3px solid #6a9c2d;
+    }
+    
+    /* Dashboard Panels */
+    .dashboard-panels {
+      margin-bottom: 30px;
+    }
+    
+    .custom-panel {
+      border-radius: 6px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      border: 1px solid #ddd;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+    
+    .custom-panel:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    
+    .panel-heading {
+      background-color: #f8f8f8;
+      color: #333;
+      padding: 15px 20px;
+      border-bottom: 2px solid #f0f0f0;
+      border-radius: 6px 6px 0 0;
+    }
+    
+    .panel-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .panel-title i {
+      margin-right: 8px;
+      color: #321FAA;
+    }
+    
+    .panel-body {
+      padding: 0;
+    }
+    
+    /* Application List */
+    .application-list, .quick-actions-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .application-list li, .quick-actions-list li {
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s ease;
+    }
+    
+    .application-list li:last-child, .quick-actions-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .application-list a, .quick-actions-list a {
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      color: #646262;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    
+    .application-list a:hover, .quick-actions-list a:hover {
+      background-color: #f9f9f9;
+    }
+    
+    .application-list i, .quick-actions-list i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+      font-size: 16px;
+      color: #321FAA;
+    }
+    
+    .app-text, .action-text {
+      flex-grow: 1;
+    }
+    
+    .badge {
+      font-size: 13px;
+      font-weight: 600;
+      background-color: #50BFFF;
+      margin-top: 2px;
+    }
+    
+    .panel-footer {
+      background-color: #f8f8f8;
+      padding: 15px 20px;
+      border-top: 1px solid #eee;
+      text-align: right;
+    }
+    
+    .view-all-link {
+      color: #321FAA;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .view-all-link:hover {
+      color: #50BFFF;
+      text-decoration: none;
+    }
+    
+    .view-all-link i {
+      margin-left: 5px;
+    }
+  </style>
+</html>

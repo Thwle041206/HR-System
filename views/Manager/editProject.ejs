@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<%- include('../partials/header') %>
+
+<body>
+    <%- include('../partials/navbar') %>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <%- include('../partials/sidebar') %>
+        <!-- /#sidebar-wrapper -->
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid xyz">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>
+                            <i class="fa fa-angle-right"></i> Edit Project
+                        </h1>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="/manager/update-project/<%= project._id %>" method="POST">
+                                    <div class="form-group">
+                                        <label for="title">Project Title</label>
+                                        <input type="text" class="form-control" id="title" name="title" value="<%= project.title %>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="type">Type</label>
+                                        <select class="form-control" id="type" name="type" required>
+                                            <option value="Website" <%= project.type === 'Website' ? 'selected' : '' %>>Website</option>
+                                            <option value="Application" <%= project.type === 'Application' ? 'selected' : '' %>>Application</option>
+                                            <option value="Mobile App" <%= project.type === 'Mobile App' ? 'selected' : '' %>>Mobile App</option>
+                                            <option value="Design" <%= project.type === 'Design' ? 'selected' : '' %>>Design</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select class="form-control" id="status" name="status" required>
+                                            <option value="Not started" <%= project.status === 'Not started' ? 'selected' : '' %>>Not started</option>
+                                            <option value="Ongoing" <%= project.status === 'Ongoing' ? 'selected' : '' %>>In Progress</option>
+                                            <option value="Finished" <%= project.status === 'Finished' ? 'selected' : '' %>>Completed</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="startDate">Start Date</label>
+                                            <input type="date" class="form-control" id="startDate" name="startDate" 
+                                                value="<%= moment(project.startDate).format('YYYY-MM-DD') %>" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="endDate">End Date</label>
+                                            <input type="date" class="form-control" id="endDate" name="endDate" 
+                                                value="<%= moment(project.endDate).format('YYYY-MM-DD') %>" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="4" required><%= project.description %></textarea>
+                                    </div>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <div class="form-group">
+                                        <a href="/manager/view-projects" class="btn btn-secondary">Cancel</a>
+                                        <button type="submit" class="btn btn-primary">Update Project</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="/javascripts/sidebar_menu.js"></script>
+    
+    <style>
+        .card {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</body>
+</html> 

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/header') %>
+
+    <body>
+        <nav class="navbar navbar-default no-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+
+            <div class="navbar-header fixed-brand">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
+                    <span class="glyphicon glyphicon-th-large" style="margin-left: 5px" aria-hidden="true"></span>
+                </button>
+                <a class="navbar-brand" href="#"><i class="fa fa-a fa-4"></i>
+                    <%= userName %>
+                </a>
+            </div>
+            <!-- navbar-header-->
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2">
+                            <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+                        </button>
+                    </li>
+                    <li class="navbar-brand">
+                        <form action="/logout" method="get">
+                            <button id="logout" type="submit" style="margin-top: -3px" class="btn btn-default">
+                                <i class="fa fa-user" aria-hidden="true"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <!-- bs-example-navbar-collapse-1 -->
+        </nav>
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+                    <li>
+                        <a href="/employee/"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-tachometer fa-stack-1x"></i></span>
+                            Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/employee/apply-for-leave"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-envelope-square fa-stack-1x"></i></span> Apply for Leave</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="$('#myModal').modal('show'); return false;">
+                            <span class="fa-stack fa-lg pull-left"><i class="fa fa-list-ol fa-stack-1x"></i></span>View
+                            Attendance</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="$('#myModal2').modal('show'); return false;"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-check-circle fa-stack-1x"></i></span>Mark Attendance</a>
+                    </li>
+                    <li>
+                        <a href="/employee/view-profile"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-user fa-stack-1x"></i></span>View Profile</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /#sidebar-wrapper -->
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid xyz">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <br />
+                            <div class="alert alert-info">
+                                <h3><i class="fa fa-info-circle"></i> <%= title %></h3>
+                                <p><%= message %></p>
+                                <div class="mt-4">
+                                    <a href="/employee/" class="btn btn-primary">
+                                        <i class="fa fa-home"></i> Return to Dashboard
+                                    </a>
+                                    <a href="/employee/view-attendance-current" class="btn btn-secondary">
+                                        <i class="fa fa-calendar"></i> View Attendance
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+        </div>
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.js" charset="UTF-8"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js" charset="UTF-8"></script>
+        <script src="/javascripts/sidebar_menu.js"></script>
+        
+        <script>
+            $(document).ready(function() {
+                // Populate year dropdown
+                var yearSelect = $("#year");
+                if (yearSelect.length > 0) {
+                    const currentYear = new Date().getFullYear();
+                    for (var i = currentYear; i > currentYear - 10; i--) {
+                        yearSelect.append($("<option />").val(i).html(i));
+                    }
+                    yearSelect.val(currentYear);
+                }
+                
+                // Set current month as selected
+                $("#month").val(new Date().getMonth() + 1);
+            });
+        </script>
+    </body>
+
+    <!-- View Attendance Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form method="post" action="/employee/view-attendance">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Select Month/Year</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="Month">Month:</label>
+                            <select class="form-control" id="month" name="month">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Year:</label>
+                            <select class="form-control" id="year" name="year"></select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <% if (typeof csrfToken !== 'undefined') { %>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <% } %>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-default">View</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mark Attendance Modal -->
+    <div id="myModal2" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <form method="post" action="/employee/mark-employee-attendance">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                        <h4 class="modal-title">Mark Attendance</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to mark attendance?</p>
+                        <p><small>* If this is your first attendance today, it will be recorded as check-in. If you have already checked in, this will be recorded as check-out.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <% if (typeof csrfToken !== 'undefined') { %>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <% } %>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            No
+                        </button>
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</html> 

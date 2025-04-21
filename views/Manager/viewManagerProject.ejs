@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/header') %>
+
+    <body>
+        <%- include('../partials/navbar') %>
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <%- include('../partials/sidebar') %>
+            <!-- /#sidebar-wrapper -->
+            
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid xyz">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1>
+                                <i class="fa fa-angle-right"></i> Project's Details
+                            </h1>
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons mb-4">
+                                <a href="/manager/view-projects" class="btn btn-default">
+                                    <i class="fa fa-arrow-left"></i> Back to Projects
+                                </a>
+                                <a href="/manager/edit-project/<%= project._id %>" class="btn btn-primary">
+                                    <i class="fa fa-edit"></i> Edit Project
+                                </a>
+                            </div>
+
+                            <!-- Project Details Panel -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Project Information</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th style="width: 150px;">Title :</th>
+                                                    <td><%= project.title %></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Type :</th>
+                                                    <td><%= project.type %></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status :</th>
+                                                    <td>
+                                                        <% if (project.status === "Ongoing") { %>
+                                                            <span class="label label-info">In Progress</span>
+                                                        <% } else if (project.status === "Finished") { %>
+                                                            <span class="label label-success">Completed</span>
+                                                        <% } else { %>
+                                                            <span class="label label-warning">Not started</span>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Start Date :</th>
+                                                    <td><%= moment(project.startDate).format('MMMM Do YYYY') %></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>End Date :</th>
+                                                    <td><%= moment(project.endDate).format('MMMM Do YYYY') %></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">Description</h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <p style="white-space: pre-wrap;"><%= project.description %></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+        </div>
+        <!-- /#wrapper -->
+        
+        <!-- Mark Attendance Modal -->
+        <div id="myModal2" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <form method="post" action="/manager/mark-manager-attendance">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Mark Attendance</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to mark attendance.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="reset" class="btn btn-default" data-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-default">Yes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Attendance Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form method="post" action="/manager/view-attendance">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Select Month/Year</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="Month">Month:</label>
+                                <select class="form-control" id="month" name="month">
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="year">Year:</label>
+                                <select class="form-control" id="year" name="year">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-default">View</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery (đảm bảo jQuery được tải đầu tiên) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- Moment.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <!-- Custom scripts -->
+        <script src="/javascripts/sidebar_menu.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                // Khởi tạo sidebar
+                initMenu();
+                
+                // Khởi tạo select năm
+                for (i = new Date().getFullYear(); i > 1900; i--) {
+                    $('#year').append($('<option />').val(i).html(i));
+                }
+            });
+            
+            // Hàm khởi tạo menu
+            function initMenu() {
+                $('#menu ul').hide();
+                
+                $('#menu li a').click(function() {
+                    var checkElement = $(this).next();
+                    
+                    if((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+                        return false;
+                    }
+                    
+                    if((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+                        $('#menu ul:visible').slideUp('normal');
+                        checkElement.slideDown('normal');
+                        return false;
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

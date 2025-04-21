@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/header') %>
+    <style>
+        .huge {
+            font-size: 40px;
+        }
+
+        .panel-green {
+            border-color: #5cb85c;
+        }
+
+        .panel-green > .panel-heading {
+            border-color: #5cb85c;
+            color: white;
+            background-color: #5cb85c;
+        }
+
+        .panel-green > a {
+            color: #5cb85c;
+        }
+
+        .panel-green > a:hover {
+            color: #3d8b3d;
+        }
+
+        .panel-red {
+            border-color: #d9534f;
+        }
+
+        .panel-red > .panel-heading {
+            border-color: #d9534f;
+            color: white;
+            background-color: #d9534f;
+        }
+
+        .panel-red > a {
+            color: #d9534f;
+        }
+
+        .panel-red > a:hover {
+            color: #b52b27;
+        }
+
+        .panel-yellow {
+            border-color: #f0ad4e;
+        }
+
+        .panel-yellow > .panel-heading {
+            border-color: #f0ad4e;
+            color: white;
+            background-color: #f0ad4e;
+        }
+
+        .panel-yellow > a {
+            color: #f0ad4e;
+        }
+
+        .panel-yellow > a:hover {
+            color: #df8a13;
+        }
+        
+        /* Modern Dashboard Styles */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 2px solid #eee;
+            background-color: #fafafa;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .header-title h1 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 24px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .current-date {
+            margin: 0;
+            color: #777;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .day-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .date-text {
+            color: #666;
+        }
+        
+        .date-selector-btn {
+            padding: 8px 15px;
+            border-radius: 4px;
+            background-color: #343a40;
+            color: white;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .date-selector-btn:hover {
+            background-color: #23272b;
+        }
+        
+        /* Dashboard Stat Cards - Enhanced */
+        .dashboard-stats {
+            margin-bottom: 35px;
+        }
+        
+        .stat-card {
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .stat-card-body {
+            padding: 20px 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            min-height: 100px;
+            position: relative;
+            justify-content: flex-start;
+        }
+        
+        .stat-card-icon {
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.25);
+            margin-right: 20px;
+            margin-left: 0;
+            border: 1px solid rgba(255,255,255,0.4);
+            flex-shrink: 0;
+        }
+        
+        .stat-card-icon i {
+            font-size: 28px;
+            color: #fff;
+        }
+        
+        .stat-card-info {
+            flex: 1;
+            text-align: right;
+            padding-right: 10px;
+        }
+        
+        .stat-card-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            line-height: 1;
+            color: #fff;
+            display: block;
+            letter-spacing: 0.5px;
+            text-align: right;
+        }
+        
+        .stat-card-title {
+            font-size: 15px;
+            color: #fff;
+            opacity: 0.9;
+            display: block;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-align: right;
+        }
+        
+        .stat-card-footer {
+            background: #ffffff;
+            padding: 10px 15px;
+            border-top: 2px solid rgba(0,0,0,0.05);
+            margin-top: auto;
+        }
+        
+        .view-details-btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            width: 100%;
+            color: #080052;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        
+        .view-details-btn i {
+            margin-left: 0;
+            font-size: 16px;
+        }
+        
+        .view-details-btn span {
+            line-height: 1.2;
+        }
+        
+        .view-details-btn:hover {
+            color: #50BFFF;
+            opacity: 0.9;
+            text-decoration: none;
+        }
+        
+        /* Card Colors with Enhanced Borders */
+        .team-card {
+            background-color: #321FAA;
+            border-bottom: 3px solid #1b106b;
+        }
+        
+        .projects-card {
+            background-color: #50BFFF;
+            border-bottom: 3px solid #0e8ad9;
+        }
+        
+        .leaves-card {
+            background-color: #C9D64F;
+            border-bottom: 3px solid #a8b52d;
+        }
+        
+        .attendance-card {
+            background-color: #8BC34A;
+            border-bottom: 3px solid #6a9c2d;
+        }
+        
+        /* Panel Enhancements */
+        .panel {
+            border: 1px solid #ddd;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .panel:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .panel-heading {
+            border-bottom: 2px solid #f0f0f0;
+            background-color: #f8f8f8;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            padding: 15px 20px;
+        }
+        
+        .panel-title {
+            font-weight: 600;
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .panel-title i {
+            margin-right: 8px;
+            color: #321FAA;
+        }
+        
+        .list-group-item {
+            border-left: none;
+            border-right: none;
+            transition: background-color 0.2s ease;
+            padding: 12px 15px;
+            font-size: 14px;
+        }
+        
+        .list-group-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        
+        .list-group-item .badge {
+            font-size: 13px;
+            font-weight: 600;
+            background-color: #50BFFF;
+            margin-top: 2px;
+        }
+        
+        .list-group-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .list-group-item:first-child {
+            border-top: none;
+        }
+        
+        .panel-body .text-right {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .panel-body .text-right a {
+            color: #321FAA;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .panel-body .text-right a:hover {
+            color: #50BFFF;
+            text-decoration: none;
+        }
+        
+        .panel-body .text-right a i {
+            margin-left: 5px;
+        }
+        
+        /* Calendar Dropdown */
+        .calendar-dropdown {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            z-index: 1000;
+            display: none;
+            float: left;
+            min-width: 300px;
+            padding: 10px;
+            margin: 2px 0 0;
+            background-color: #fff;
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        }
+        
+        .datepicker table {
+            width: 100%;
+        }
+        
+        .datepicker .datepicker-days th, 
+        .datepicker .datepicker-days td {
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .datepicker table tr td.active,
+        .datepicker table tr td.active:hover,
+        .datepicker table tr td.active.disabled,
+        .datepicker table tr td.active.disabled:hover {
+            background-color: #080052 !important;
+            background-image: none;
+        }
+        
+        .datepicker table tr td.today,
+        .datepicker table tr td.today:hover,
+        .datepicker table tr td.today.disabled,
+        .datepicker table tr td.today.disabled:hover {
+            background-color: rgba(8, 0, 82, 0.2) !important;
+            background-image: none;
+        }
+    </style>
+    
+    <!-- Bootstrap Datepicker CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+    <body>
+        <nav class="navbar navbar-default no-margin">
+            <div class="navbar-header fixed-brand">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
+                    <span class="glyphicon glyphicon-th-large" style="margin-left:5px;" aria-hidden="true"></span>
+                </button>
+                <a class="navbar-brand" href="#"><i class="fa fa-a fa-4"></i>
+                    <%= userName %>
+                </a>
+            </div><!-- navbar-header-->
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"><span
+                                class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button>
+                    </li>
+                    <li class="navbar-brand">
+                        <form action="/logout" method="get">
+                            <button id="logout" type="submit" style="margin-top: -3px;" class="btn btn-default"><i
+                                    class="fa fa-user" aria-hidden="true"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div><!-- bs-example-navbar-collapse-1 -->
+        </nav>
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+                    <li>
+                        <a href="/manager/"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-tachometer fa-stack-1x "></i></span> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/manager/view-employees"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-users fa-stack-1x "></i></span> View Employees</a>
+                    </li>
+                    <li>
+                        <a href="/manager/apply-for-leave"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-envelope-square fa-stack-1x "></i></span> Apply for Leave</a>
+                    </li>
+                    <li data-toggle="modal" data-target="#myModal">
+                        <a href="#"> <span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-list-ol fa-stack-1x "></i></span> View
+                            Attendance</a>
+                    </li>
+                    <li data-toggle="modal" data-target="#myModal2">
+                        <a href="#"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-check-circle fa-stack-1x "></i></span> Mark Attendance</a>
+                    </li>
+                    <li>
+                        <a href="/manager/view-profile"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-user fa-stack-1x "></i></span> View Profile</a>
+                    </li>
+                </ul>
+            </div><!-- /#sidebar-wrapper -->
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid xyz">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- Modern Dashboard Header -->
+                            <div class="dashboard-header">
+                                <div class="header-title">
+                                    <h1><i class="fa fa-angle-right"></i> Manager Dashboard</h1>
+                                    <p class="current-date">
+                                        <span class="day-name">Wednesday</span> 
+                                        <span class="date-text" id="currentDate">20th of April 2025 08:00:33 AM</span>
+                                    </p>
+                                </div>
+                                
+                                <div class="date-selector">
+                                    <div class="btn-group">
+                                        <button class="btn btn-dark date-selector-btn" id="calendarBtn" type="button">
+                                            <i class="fa fa-calendar"></i> <span id="selectedMonth">April, 2025</span> <i class="fa fa-caret-down"></i>
+                                        </button>
+                                        <div id="calendar-container" class="calendar-dropdown">
+                                            <div id="dashboard-calendar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Dashboard Cards -->
+                            <div class="row dashboard-stats">
+                                <!-- Team Members Card -->
+                                <div class="col-md-3">
+                                    <div class="stat-card team-card">
+                                        <div class="stat-card-body">
+                                            <div class="stat-card-icon">
+                                                <i class="fa fa-users"></i>
+                                            </div>
+                                            <div class="stat-card-info">
+                                                <div class="stat-card-number">
+                                                    <%= teamMembers %>
+                                                </div>
+                                                <div class="stat-card-title">
+                                                    Team Members
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="stat-card-footer">
+                                            <a href="/manager/view-employees" class="view-details-btn">
+                                                <span>View Detail</span> <i class="fa fa-arrow-circle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Active Projects Card -->
+                                <div class="col-md-3">
+                                    <div class="stat-card projects-card">
+                                        <div class="stat-card-body">
+                                            <div class="stat-card-icon">
+                                                <i class="fa fa-tasks"></i>
+                                            </div>
+                                            <div class="stat-card-info">
+                                                <div class="stat-card-number">
+                                                    <%= activeProjects %>
+                                                </div>
+                                                <div class="stat-card-title">
+                                                    Active Projects
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="stat-card-footer">
+                                            <a href="/manager/view-projects" class="view-details-btn">
+                                                <span>View Detail</span> <i class="fa fa-arrow-circle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Pending Leaves Card -->
+                                <div class="col-md-3">
+                                    <div class="stat-card leaves-card">
+                                        <div class="stat-card-body">
+                                            <div class="stat-card-icon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <div class="stat-card-info">
+                                                <div class="stat-card-number">
+                                                    <%= pendingLeaves %>
+                                                </div>
+                                                <div class="stat-card-title">
+                                                    Pending Leaves
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="stat-card-footer">
+                                            <a href="/manager/leave-applications" class="view-details-btn">
+                                                <span>View Detail</span> <i class="fa fa-arrow-circle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Today's Attendance Card -->
+                                <div class="col-md-3">
+                                    <div class="stat-card attendance-card">
+                                        <div class="stat-card-body">
+                                            <div class="stat-card-icon">
+                                                <i class="fa fa-check-circle"></i>
+                                            </div>
+                                            <div class="stat-card-info">
+                                                <div class="stat-card-number">
+                                                    <%= todayAttendance %>
+                                                </div>
+                                                <div class="stat-card-title">
+                                                    Today's Attendance
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="stat-card-footer">
+                                            <a href="/manager/view-manager-attendance" class="view-details-btn">
+                                                <span>View Detail</span> <i class="fa fa-arrow-circle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Row -->
+                            <div class="row">
+                                <!-- Project Status -->
+                                <div class="col-lg-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title"><i class="fa fa-tasks fa-fw"></i> Project Status</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="list-group">
+                                                <a href="/manager/view-projects?status=completed" class="list-group-item">
+                                                    <span class="badge"><%= completedProjects %></span>
+                                                    <i class="fa fa-fw fa-check"></i> Completed Projects
+                                                </a>
+                                                <a href="/manager/view-projects?status=in-progress" class="list-group-item">
+                                                    <span class="badge"><%= inProgressProjects %></span>
+                                                    <i class="fa fa-fw fa-spinner"></i> In Progress Projects
+                                                </a>
+                                            </div>
+                                            <div class="text-right">
+                                                <a href="/manager/view-projects">View All Projects <i class="fa fa-arrow-circle-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Actions -->
+                                <div class="col-lg-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title"><i class="fa fa-rocket fa-fw"></i> Quick Actions</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="list-group">
+                                                <a href="/manager/apply-for-leave" class="list-group-item">
+                                                    <i class="fa fa-fw fa-calendar-plus-o"></i> Apply for Leave
+                                                </a>
+                                                <a href="#" data-toggle="modal" data-target="#myModal2" class="list-group-item">
+                                                    <i class="fa fa-fw fa-check"></i> Mark Attendance
+                                                </a>
+                                                <a href="/manager/view-profile" class="list-group-item">
+                                                    <i class="fa fa-fw fa-user"></i> View Profile
+                                                </a>     
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.js" charset="UTF-8"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js" charset="UTF-8"></script>
+        <!-- Bootstrap Datepicker JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+        <script src="/javascripts/sidebar_menu.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Year dropdown for the attendance modal
+                for (i = new Date().getFullYear(); i > 1900; i--) {
+                    $('#year').append($('<option />').val(i).html(i));
+                }
+                
+                // Initialize the datepicker with additional options
+                $('#dashboard-calendar').datepicker({
+                    format: 'mm/dd/yyyy',
+                    todayHighlight: true,
+                    autoclose: true,
+                    clearBtn: true,
+                    todayBtn: 'linked',
+                    orientation: 'bottom auto',
+                    container: '#calendar-container'
+                });
+
+                // Toggle calendar visibility with animation
+                $('#calendarBtn').click(function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $('#calendar-container').slideToggle(200);
+                });
+
+                // Hide calendar when clicking outside
+                $(document).click(function(e) {
+                    if (!$(e.target).closest('#calendar-container, #calendarBtn').length) {
+                        $('#calendar-container').slideUp(200);
+                    }
+                });
+
+                // Update date when selecting from calendar
+                $('#dashboard-calendar').on('changeDate', function(e) {
+                    const date = e.date;
+                    const monthNames = ["January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"];
+                    
+                    const selectedMonthText = monthNames[date.getMonth()] + ', ' + date.getFullYear();
+                    $('#selectedMonth').text(selectedMonthText);
+                    
+                    // Mark the selection as manually set so it doesn't get overwritten
+                    $('#selectedMonth').data('manually-set', true);
+                    
+                    // Here you can add code to load data for the selected date
+                    loadDayData(date);
+                    
+                    // Hide the calendar with animation
+                    $('#calendar-container').slideUp(200);
+                });
+
+                // Update real-time clock
+                updateCurrentDate();
+                // Update every second
+                setInterval(updateCurrentDate, 1000);
+                
+                // Set current month in the date selector on initial load
+                const now = new Date();
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+                $('#selectedMonth').text(monthNames[now.getMonth()] + ', ' + now.getFullYear());
+            });
+
+            // Function to update current date and time with improved formatting
+            function updateCurrentDate() {
+                const now = new Date();
+                const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+                
+                // Get the day of month with suffix (1st, 2nd, 3rd, etc.)
+                const day = now.getDate();
+                let daySuffix = "th";
+                if (day === 1 || day === 21 || day === 31) daySuffix = "st";
+                else if (day === 2 || day === 22) daySuffix = "nd";
+                else if (day === 3 || day === 23) daySuffix = "rd";
+                
+                // Format time in 12-hour format with AM/PM
+                let hours = now.getHours();
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // Convert 0 to 12
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
+                
+                // Set the day name and full date with time
+                $('.day-name').text(dayNames[now.getDay()]);
+                $('#currentDate').text(`${day}${daySuffix} of ${monthNames[now.getMonth()]} ${now.getFullYear()} ${hours}:${minutes}:${seconds} ${ampm}`);
+            }
+
+            // Function to load data for a specific day (to be implemented)
+            function loadDayData(date) {
+                // Format the date as YYYY-MM-DD for data loading
+                const formattedDate = date.getFullYear() + '-' + 
+                                    (date.getMonth() + 1).toString().padStart(2, '0') + '-' + 
+                                    date.getDate().toString().padStart(2, '0');
+                
+                console.log('Loading data for:', formattedDate);
+                
+                // Example AJAX call - replace with actual implementation
+                /* 
+                $.ajax({
+                    url: '/manager/get-data-for-date',
+                    type: 'POST',
+                    data: {
+                        date: formattedDate,
+                        _csrf: '<%= csrfToken %>'
+                    },
+                    success: function(response) {
+                        // Update dashboard with the returned data
+                        console.log('Data loaded:', response);
+                    },
+                    error: function(error) {
+                        console.error('Error loading data:', error);
+                    }
+                });
+                */
+            }
+        </script>
+    </body>
+
+    <div id="myModal2" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <form method="post" action="/manager/mark-manager-attendance">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Mark Attendance</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to mark attendance.</p>
+                    </div>
+                    <div class="modal-footer">
+
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="reset" class="btn btn-default" data-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-default">Yes</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form method="post" action="/manager/view-attendance">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Select Month/Year</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="Month">Month:</label>
+                            <select class="form-control" id="month" name="month">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Year:</label>
+                            <select class="form-control" id="year" name="year">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-default">View</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</html>

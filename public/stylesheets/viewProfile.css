@@ -1,0 +1,178 @@
+﻿.profile-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
+  position: relative;
+  margin-right: 50px;
+}
+.nav-item{
+  text-decoration: none;
+  color: #000;
+  font-size: 22px;
+  font-weight: bold;
+  margin-left: -10px;
+  margin-top: 10px;
+}
+.nav-item:hover {
+  color: #8ed4a4;
+  transition: color 0.3s ease-in-out;
+}
+.nav-item.active {
+  color: #8ed4a4;
+  font-weight: bold;
+}
+.nav-item.active:hover {
+  color: #8ed4a4;
+  transition: color 0.3s ease-in-out;
+}
+.nav-item.active::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #8ed4a4;
+  position: absolute;
+  bottom: -5px; /* Adjust this value to position the line */
+  left: 0;
+}
+
+
+.profile-card {
+  width: 280px;
+  height: 500px;
+  background-color: #dff1fb;
+  border-radius: 16px;
+  padding-bottom: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  margin-right: 15px;
+  margin-left: -160px;
+  margin-top: 100px;
+}
+
+.half-card {
+  background-color: #000;
+  width: 100%;
+  height: 170px; /* hoặc chiều cao tùy chỉnh */
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  position: relative;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #8ed4a4;
+  margin: 100px auto 10px;
+
+}
+
+
+.status-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #a3e635;
+  color: #333;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px 50px;
+}
+
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  font-size: 12px;
+  margin-top: 140px;
+  margin-left: 20px;
+}
+
+
+.main-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.right-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.section-box {
+  background-color: #dff1fb;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+
+.section-box h4 {
+  margin-bottom: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+
+.section-box p {
+  margin: 3px 0;
+  font-size: 14px;
+}
+
+
+.info-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+
+.date-info-wrapper {
+  background-color: #c8ebff; 
+  padding: 20px;
+  border-radius: 0px;
+  margin-top: 50px;
+  height: 95px; 
+}
+
+.date-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-left: 150px;
+  margin-right: 150px;
+}
+
+.date-card {
+  display: flex;
+  align-items: flex-start;  
+  gap: 15px;
+}
+
+.date-card i {
+  font-size: 25px;
+  color: #000;
+  margin-top: 10px; 
+}
+
+.date-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.date-text strong {
+  font-weight: bold;
+}
+
+

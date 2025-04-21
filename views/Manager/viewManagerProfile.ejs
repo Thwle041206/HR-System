@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/header') %>
+
+    <body>
+        <nav class="navbar navbar-default no-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+
+            <div class="navbar-header fixed-brand">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
+                    <span class="glyphicon glyphicon-th-large" style="margin-left:5px;" aria-hidden="true"></span>
+                </button>
+                <a class="navbar-brand" href="#"><i class="fa fa-a fa-4"></i>
+                    <%= userName %>
+                </a>
+            </div><!-- navbar-header-->
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"><span
+                                class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button>
+                    </li>
+                    <li class="navbar-brand">
+                        <form action="/logout" method="get">
+                            <button id="logout" type="submit" style="margin-top: -3px;" class="btn btn-default"><i
+                                    class="fa fa-user" aria-hidden="true"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div><!-- bs-example-navbar-collapse-1 -->
+        </nav>
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+                    <li>
+                        <a href="/manager/"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-tachometer fa-stack-1x "></i></span> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/manager/view-employees"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-users fa-stack-1x "></i></span> View Employees</a>
+                    </li>
+                    <li>
+                        <a href="/manager/apply-for-leave"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-envelope-square fa-stack-1x "></i></span> Apply for Leave</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="$('#myModal').modal('show'); return false;"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-list-ol fa-stack-1x "></i></span> View Attendance</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="$('#myModal2').modal('show'); return false;"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-check-circle fa-stack-1x "></i></span> Mark Attendance</a>
+                    </li>
+                    <li class="active">
+                        <a href="/manager/view-profile"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-user fa-stack-1x "></i></span> View Profile</a>
+                    </li>
+                </ul>
+            </div><!-- /#sidebar-wrapper -->
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid xyz">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="menu1">
+                                <h1>Profile</h1>
+                                <br>
+                                <div id="viewMode">
+                                <form class="form-group-sm" method="get" action="/manager/view-all-personal-projects">
+                                    <h4>Name : <label id="name">
+                                            <%= employee.name %>
+                                        </label></h4>
+                                    <h4>Email : <label id="type">
+                                            <%= employee.email %>
+                                        </label></h4>
+                                    <h4>Date of Birth : <label id="dob">
+                                            <%= moment(employee.dateOfBirth).format('MMMM Do YYYY') %>
+                                        </label></h4>
+                                        <a href="/manager/edit-profile" class="btn btn-primary">
+                                            <i class="fas fa-edit"></i> Edit Profile
+                                          </a>
+                                    <h4>Department : <label id="department">
+                                            <% if(!employee.department){%>
+                                                <%="N /A"%>
+                                                    <% } else{%>
+                                                        <%=employee.department%>
+                                                            <%}%>
+                                        </label></h4>
+                                    <h4>Designation : <label id="designation">
+                                            <% if(!employee.designation){%>
+                                                <%="N /A"%>
+                                                    <% } else{%>
+                                                        <%=employee.designation%>
+                                                            <%}%>
+                                        </label></h4>
+                                    <%if(employee.type=="project_manager"){%>
+                                        <h4>Projects : <label id="projects">
+                                                <button type="submit" class="form-control">View Projects</button>
+                                            </label></h4>
+
+                                        <% if(employee.Skills.length> 0){ %>
+
+                                            <h4>Skills:</h4>
+                                            <div style="height: 250px; overflow: auto;">
+                                                <ul class="list-group" id="skills">
+                                                    <% employee.Skills.forEach(function(val){ if(val !="" ){ %>
+                                                        <li class="list-group-item">
+                                                            <%= val %>
+                                                        </li>
+
+                                                        <% } }) %>
+
+                                                </ul>
+                                            </div>
+                                            <% }else{ %>
+                                                <h4>Skills : <label id="skills">N/A</label></h4>
+                                                <% } %>
+                                                    <%}%>
+                                </form>                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.js" charset="UTF-8"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js" charset="UTF-8"></script>
+
+
+        <script src="/javascripts/sidebar_menu.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#editProfileBtn').click(function(e) {
+                    e.preventDefault();
+                    console.log('Edit button clicked');
+                    $('#viewMode').hide();
+                    $('#editMode').show();
+                });
+                
+                $('#cancelEditBtn').click(function(e) {
+                    e.preventDefault();
+                    console.log('Cancel button clicked');
+                    $('#editMode').hide();
+                    $('#viewMode').show();
+                });
+                for (i = new Date().getFullYear(); i > 1900; i--) {
+                    $('#year').append($('<option />').val(i).html(i));
+                }
+                
+                // Fix active menu state on all modals
+                // This script runs after sidebar_menu.js and fixes the active state issues
+                // Maintain correct active item 
+                $('#menu li').removeClass('active');
+                $('#menu li:eq(6)').addClass('active'); // View Profile is active
+                
+                // Remove all click handlers from menu items with modal triggers
+                $('a[onclick*="modal"]').off('click');
+                
+                // Fix modals messing with active states
+                $('.modal').on('show.bs.modal hide.bs.modal', function (e) {
+                    // Force View Profile to remain active regardless of modal state
+                    setTimeout(function() {
+                        $('#menu li').removeClass('active');
+                        $('#menu li:eq(6)').addClass('active');
+                    }, 50);
+                });
+
+                // --- Address API Integration ---
+                const citySelect = $('#addressCitySelect');
+                const districtSelect = $('#addressDistrictSelect');
+                // Get current values safely, handling cases where address might be null/undefined
+                const currentCity = "<%= employee.address && employee.address.city ? employee.address.city.trim() : '' %>";
+                const currentDistrict = "<%= employee.address && employee.address.district ? employee.address.district.trim() : '' %>";
+                let cityApiData = []; // Store city data including codes
+
+                console.log("Current City:", currentCity);
+                console.log("Current District:", currentDistrict);
+
+                function populateDistricts(cityCode, selectedDistrict) {
+                    districtSelect.html('<option value="">Loading Districts...</option>').prop('disabled', true);
+                    if (!cityCode) {
+                         districtSelect.html('<option value="">Select City First</option>').prop('disabled', true);
+                         return;
+                    }
+                    console.log(`Fetching districts for city code: ${cityCode}`);
+                    // Corrected API URL for districts
+                    fetch(`https://provinces.open-api.vn/api/p/${cityCode}?depth=2`) 
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                         })
+                        .then(data => {
+                            districtSelect.html('<option value="">Select District</option>'); // Clear loading/default
+                            if (data && data.districts && data.districts.length > 0) {
+                                console.log(`Found ${data.districts.length} districts.`);
+                                data.districts.forEach(district => {
+                                    const option = $('<option></option>')
+                                        .val(district.name.trim()) // Use name as value, trim whitespace
+                                        .text(district.name);
+                                    // Trim comparison values
+                                    if (district.name.trim() === selectedDistrict) {
+                                        console.log(`Selecting district: ${district.name}`);
+                                        option.prop('selected', true);
+                                    }
+                                    districtSelect.append(option);
+                                });
+                            } else {
+                                console.warn("No districts found or empty array for city code:", cityCode, data);
+                                districtSelect.html('<option value="">No Districts Found</option>');
+                            }
+                             districtSelect.prop('disabled', false);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching districts:', error);
+                            districtSelect.html('<option value="">Error Loading Districts</option>').prop('disabled', true);
+                        });
+                }
+
+                // Fetch cities on load with error handling
+                console.log("Attempting to fetch cities from API...");
+                // Corrected API URL for provinces/cities with fallback
+                const cityApiUrl = 'https://provinces.open-api.vn/api/p/';
+                const fallbackCities = [
+                  { name: 'Hà Nội', code: '01' },
+                  { name: 'Hồ Chí Minh', code: '79' },
+                  { name: 'Đà Nẵng', code: '48' }
+                ];
+                
+                fetch(cityApiUrl)
+                    .then(response => {
+                        console.log("Received response from city API. Status:", response.status);
+                        if (!response.ok) {
+                            console.error("City API response was not OK:", response.status, response.statusText);
+                            // Attempt to read response body even on error for more details
+                            return response.text().then(text => {
+                                console.error("Error response body:", text);
+                                throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+                            });
+                        }
+                        console.log("City API response OK. Parsing JSON...");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Successfully parsed city JSON data:", data);
+                        cityApiData = data; // Store for later use
+                        citySelect.html('<option value="">Select City</option>'); // Clear loading/default
+                        let initialCityCode = null;
+                        if (cityApiData && Array.isArray(cityApiData) && cityApiData.length > 0) {
+                             console.log(`Found ${cityApiData.length} cities.`);
+                            cityApiData.forEach(city => {
+                                const option = $('<option></option>')
+                                    .val(city.name.trim()) // Use name as value, trim whitespace
+                                    .text(city.name)
+                                    .data('code', city.code); // Store code in data attribute
+                                
+                                // Trim comparison values
+                                if (city.name.trim() === currentCity) {
+                                    console.log(`Selecting city: ${city.name} (Code: ${city.code})`);
+                                    option.prop('selected', true);
+                                    initialCityCode = city.code; // Store code for initial district load
+                                }
+                                citySelect.append(option);
+                            });
+
+                            // If an initial city was selected, load its districts
+                            if(initialCityCode) {
+                                console.log(`Initial city code found: ${initialCityCode}. Populating districts...`);
+                                populateDistricts(initialCityCode, currentDistrict);
+                            } else {
+                                console.log("No initial city matched. Disabling district select.");
+                                districtSelect.prop('disabled', true); // Disable districts if no city selected initially
+                            }
+
+                        } else {
+                             console.warn("No cities found or data is not an array:", cityApiData);
+                             citySelect.html('<option value="">No Cities Found</option>');
+                             districtSelect.prop('disabled', true);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching cities:', error);
+                        // Use fallback cities if API fails
+                        cityApiData = fallbackCities;
+                        citySelect.html('<option value="">Select City</option>');
+                        
+                        fallbackCities.forEach(city => {
+                            const option = $('<option></option>')
+                                .val(city.name.trim())
+                                .text(city.name)
+                                .data('code', city.code);
+                                
+                            if (city.name.trim() === currentCity) {
+                                option.prop('selected', true);
+                                populateDistricts(city.code, currentDistrict);
+                            }
+                            citySelect.append(option);
+                        });
+                        
+                        if (!currentCity) {
+                            districtSelect.prop('disabled', true);
+                        }
+                    });
+
+                // Add change listener to city dropdown
+                citySelect.on('change', function() {
+                    const selectedOption = $(this).find('option:selected');
+                    const cityCode = selectedOption.data('code');
+                    const selectedCityName = $(this).val();
+                    
+                    console.log(`City changed. Selected: ${selectedCityName}, Code: ${cityCode}`);
+                    
+                    if (!cityCode) {
+                        districtSelect.html('<option value="">Select City First</option>').prop('disabled', true);
+                        return;
+                    }
+                    
+                    populateDistricts(cityCode, null);
+                });
+
+                // Add form validation before submission
+                $('form').on('submit', function(e) {
+                    if (!citySelect.val() || !districtSelect.val()) {
+                        e.preventDefault();
+                        alert('Please select both city and district');
+                        return false;
+                    }
+                    return true;
+                });
+
+            });
+        </script>
+    </body>
+
+    <div id="myModal2" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <form method="post" action="/manager/mark-manager-attendance">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Mark Attendance</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to mark attendance.</p>
+                    </div>
+                    <div class="modal-footer">
+
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="reset" class="btn btn-default" data-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-default">Yes</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form method="post" action="/manager/view-attendance">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Select Month/Year</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="Month">Month:</label>
+                            <select class="form-control" id="month" name="month">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Year:</label>
+                            <select class="form-control" id="year" name="year">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-default">View</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</html>

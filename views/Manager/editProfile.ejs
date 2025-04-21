@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/header') %>
+
+    <body>
+        <nav class="navbar navbar-default no-margin">
+            <div class="navbar-header fixed-brand">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
+                    <span class="glyphicon glyphicon-th-large" style="margin-left:5px;" aria-hidden="true"></span>
+                </button>
+                <a class="navbar-brand" href="#"><i class="fa fa-a fa-4"></i>
+                    <%= userName %>
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"><span
+                                class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button>
+                    </li>
+                    <li class="navbar-brand">
+                        <form action="/logout" method="get">
+                            <button id="logout" type="submit" style="margin-top: -3px;" class="btn btn-default"><i
+                                    class="fa fa-user" aria-hidden="true"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="wrapper">
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+                    <li>
+                        <a href="/manager/"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-tachometer fa-stack-1x "></i></span> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/manager/leave-applications"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-envelope-square fa-stack-1x "></i></span> Leave Applications</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick="$('#myModal').modal('show'); return false;"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-list-ol fa-stack-1x "></i></span> View Attendance</a>
+                    </li>
+                    <li class="active">
+                        <a href="/manager/view-profile"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-user fa-stack-1x "></i></span> View Profile</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="page-content-wrapper">
+                <div class="container-fluid xyz">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="menu1">
+                                <h3>Edit Profile</h3>
+
+                                <form class="form-group-sm" id="profileForm" method="post" action="/manager/update-profile">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    
+                                    <style>
+                                      .form-row {
+                                        display: flex;
+                                        margin-bottom: 15px;
+                                      }
+                                      .form-label {
+                                        min-width: 120px;
+                                        padding-top: 7px;
+                                      }
+                                      .form-fields {
+                                        flex-grow: 1;
+                                      }
+                                      .form-fields .form-control {
+                                        width: 100%;
+                                        max-width: 200px;
+                                      }
+                                      .radio-group {
+                                        display: flex;
+                                        gap: 15px;
+                                        align-items: center;
+                                      }
+                                      .radio-option {
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 5px;
+                                      }
+                                      .photo-upload {
+                                        border: 1px dashed #ccc;
+                                        padding: 15px;
+                                        text-align: center;
+                                        margin-bottom: 15px;
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+                                        justify-content: center;
+                                        height: 150px;
+                                        width:400px 
+                                      }
+                                      .photo-preview {
+                                        width: 75px;
+                                        height: 75px;
+                                        background-color: #f5f5f5;
+                                        margin-bottom: 10px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                      }
+                                      
+                                      /* Validation styles */
+                                      .is-invalid {
+                                        border-color: #dc3545;
+                                      }
+                                      .is-invalid:focus {
+                                        box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25);
+                                      }
+                                      .invalid-feedback {
+                                        display: none;
+                                        width: 100%;
+                                        margin-top: .25rem;
+                                        font-size: 80%;
+                                        color: #dc3545;
+                                      }
+                                      .is-invalid ~ .invalid-feedback {
+                                        display: block;
+                                      }
+                                    </style>
+
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <h4>Personal Information</h4>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Name:</div>
+                                          <div class="form-fields" style="display: flex; gap: 10px;">
+                                            <div style="flex: 1;">
+                                              <input type="text" class="form-control" name="firstName" value="<%= employee.firstName %>" placeholder="First" required>
+                                              <div class="invalid-feedback">Please provide a first name</div>
+                                            </div>
+                                            <div style="flex: 1;">
+                                              <input type="text" class="form-control" name="lastName" value="<%= employee.lastName %>" placeholder="Last" required>
+                                              <div class="invalid-feedback">Please provide a last name</div>
+                                            </div>
+                                          </div>
+                                        </div> 
+                                        <div class="form-row">
+                                          <div class="form-label">Birth Name:</div>
+                                          <div class="form-fields">
+                                            <input type="text" class="form-control" name="birthName" value="<%= employee.birthName || '' %>">
+                                            <div class="invalid-feedback">Please provide a birth name</div>
+                                          </div>
+                                        </div>     
+                                        
+                                      
+                                        <div class="form-row">
+                                          <div class="form-label">DOB:</div>
+                                          <div class="form-fields">
+                                            <input type="date" class="form-control" name="dateOfBirth" value="<%= employee.dateOfBirth.toISOString().split('T')[0] %>" required readonly>
+                                            <div class="invalid-feedback">Please provide a valid date of birth</div>
+                                          </div>
+                                        </div>
+                                        <div class="form-row">
+                                          <div class="form-label">Gender:</div>
+                                          <div class="form-fields radio-group">
+                                            <div class="radio-option">
+                                              <input type="radio" id="genderMale" name="gender" value="Male" <%= employee.gender === 'Male' ? 'checked' : '' %> required>
+                                              <label for="genderMale">Male</label>
+                                            </div>
+                                            <div class="radio-option">
+                                              <input type="radio" id="genderFemale" name="gender" value="Female" <%= employee.gender === 'Female' ? 'checked' : '' %>>
+                                              <label for="genderFemale">Female</label>
+                                            </div>
+                                            <div class="invalid-feedback" style="width: 100%;">Please select a gender</div>
+                                          </div>
+                                        </div>
+                                        <div class="form-row">
+                                          <div class="form-label">Personal Email:</div>
+                                          <div class="form-fields">
+                                            <input type="email" class="form-control" name="personalEmail" value="<%= employee.personalEmail || '' %>">
+                                            <div class="invalid-feedback">Please provide a valid email address</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Phone number:</div>
+                                          <div class="form-fields">
+                                            <input type="tel" class="form-control" name="contactNumber" value="<%= employee.contactNumber %>" required
+                                              pattern="(0|\+84)\d{9,10}" title="Vietnamese phone number format">
+                                            <div class="invalid-feedback">Please provide a valid Vietnamese phone number (e.g. 0912345678 or +84912345678)</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Address:</div>
+                                          <div class="form-fields" style="display: flex; gap: 10px;">
+                                            <div style="flex: 1;">
+                                              <select class="form-control" id="address-city" name="address[city]" required>
+                                                <option value="">Select City/Province</option>
+                                              </select>
+                                              <div class="invalid-feedback">Please select a city</div>
+                                            </div>
+                                            <div style="flex: 1;">
+                                              <select class="form-control" id="address-district" name="address[district]" required disabled>
+                                                <option value="">Select District</option>
+                                              </select>
+                                              <div class="invalid-feedback">Please select a district</div>
+                                            </div>
+                                            <div style="flex: 1;">
+                                              <input type="text" class="form-control" name="address[details]" value="<%= employee.address && employee.address.details ? employee.address.details : '' %>" placeholder="Street/House Number" required>
+                                              <div class="invalid-feedback">Please provide street/house number</div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                        <script>
+                                        $(document).ready(function() {
+                                            console.log('Document ready - initializing address dropdowns');
+                                            // --- Address API Integration ---
+                                            const citySelect = $('#address-city');
+                                            const districtSelect = $('#address-district');
+                                            
+                                            console.log('City select element:', citySelect);
+                                            console.log('District select element:', districtSelect);
+                                            
+                                            // Get current values safely, handling cases where address might be null/undefined
+                                            const currentCity = "<%= employee.address && employee.address.city ? employee.address.city.trim() : '' %>";
+                                            const currentDistrict = "<%= employee.address && employee.address.district ? employee.address.district.trim() : '' %>";
+                                            
+                                            console.log("Current City:", currentCity);
+                                            console.log("Current District:", currentDistrict);
+
+                                            function populateDistricts(cityCode, selectedDistrict) {
+                                                districtSelect.html('<option value="">Loading Districts...</option>').prop('disabled', true);
+                                                if (!cityCode) {
+                                                    districtSelect.html('<option value="">Select City First</option>').prop('disabled', true);
+                                                    return;
+                                                }
+                                                
+                                                console.log(`Fetching districts for city code: ${cityCode}`);
+                                                $.get(`/manager/api/provinces/${cityCode}/districts`)
+                                                    .done(function(data) {
+                                                        districtSelect.html('<option value="">Select District</option>');
+                                                        if (data && data.length > 0) {
+                                                            console.log(`Found ${data.length} districts`);
+                                                            data.forEach(district => {
+                                                                const option = $('<option></option>')
+                                                                    .val(district.name.trim())
+                                                                    .text(district.name);
+                                                                if (district.name.trim() === selectedDistrict) {
+                                                                    option.prop('selected', true);
+                                                                }
+                                                                districtSelect.append(option);
+                                                            });
+                                                        }
+                                                        districtSelect.prop('disabled', false);
+                                                    })
+                                                    .fail(function(error) {
+                                                        console.error('Error fetching districts:', error);
+                                                        districtSelect.html('<option value="">Error Loading Districts</option>').prop('disabled', true);
+                                                    });
+                                            }
+
+                                            // Fetch cities on load
+                                            console.log("Fetching cities...");
+                                            $.get('/manager/api/provinces')
+                                                .done(function(data) {
+                                                    citySelect.html('<option value="">Select City</option>');
+                                                    if (data && data.length > 0) {
+                                                        console.log(`Found ${data.length} cities`);
+                                                        let initialCityCode = null;
+                                                        
+                                                        data.forEach(city => {
+                                                            const option = $('<option></option>')
+                                                                .val(city.name.trim())
+                                                                .text(city.name)
+                                                                .data('code', city.code);
+                                                                
+                                                            if (city.name.trim() === currentCity) {
+                                                                option.prop('selected', true);
+                                                                initialCityCode = city.code;
+                                                            }
+                                                            citySelect.append(option);
+                                                        });
+                                                        
+                                                        if (initialCityCode) {
+                                                            populateDistricts(initialCityCode, currentDistrict);
+                                                        } else {
+                                                            districtSelect.prop('disabled', true);
+                                                        }
+                                                    }
+                                                })
+                                                .fail(function(error) {
+                                                    console.error('Error fetching cities:', error);
+                                                    citySelect.html('<option value="">Error Loading Cities</option>');
+                                                    districtSelect.prop('disabled', true);
+                                                });
+
+                                            // City change handler
+                                            citySelect.on('change', function() {
+                                                const selectedOption = $(this).find('option:selected');
+                                                const cityCode = selectedOption.data('code');
+                                                populateDistricts(cityCode, null);
+                                            });
+
+                                            // Form validation
+                                            $('form').on('submit', function(e) {
+                                                if (!citySelect.val() || !districtSelect.val()) {
+                                                    e.preventDefault();
+                                                    alert('Please select both city and district');
+                                                    return false;
+                                                }
+                                                return true;
+                                            });
+                                        });
+                                        </script>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Birthplace:</div>
+                                          <div class="form-fields">
+                                            <input type="text" class="form-control" name="birthplace[city]" value="<%= employee.birthplace.city %>" required>
+                                            <div class="invalid-feedback">Please provide a birthplace city</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">ID Number:</div>
+                                          <div class="form-fields">
+                                            <input type="text" class="form-control" name="idNumber" value="<%= employee.idNumber %>" required
+                                              pattern="\d{12}" title="12 digit ID number" readonly>
+                                            <div class="invalid-feedback">Please provide a valid 12-digit ID number</div>
+                                          </div>
+                                        </div>
+                                        <br><br>
+                                        <div class="form-group">
+                                          <button type="submit" class="btn btn-success" id="saveBtn">Save Changes</button>
+                                          <a href="/manager/view-profile" class="btn btn-default">Cancel</a>
+                                        </div>
+                                        <div id="saveMessage" class="alert alert-success" style="display:none;"></div>
+                                      </div>
+                                      
+                                      <div class="col-md-6">
+                                        <div class="photo-upload">
+                                          <div class="photo-preview">
+                                            <% if (employee.profileImage) { %>
+                                              <img src="<%= employee.profileImage %>?t=<%= Date.now() %>" alt="Profile Photo" class="img-thumbnail" style="max-width: 150px; max-height: 150px;">
+                                            <% } else { %>
+                                              <i class="fa fa-user fa-4x"></i>
+                                            <% } %>
+                                          </div>
+                                          <input type="file" name="profilePhoto" id="profilePhoto" accept="image/*" style="display: none;">
+                                          <button type="button" class="btn btn-sm btn-default" onclick="document.getElementById('profilePhoto').click()">Upload</button>
+                                          <div class="upload-progress" style="display:none; margin-top:10px;">
+                                            <div class="progress">
+                                              <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <script>
+                                          document.getElementById('profilePhoto').addEventListener('change', function(e) {
+                                            if (this.files && this.files[0]) {
+                                              // Show preview
+                                              const reader = new FileReader();
+                                              reader.onload = function(event) {
+                                                document.querySelector('.photo-preview').innerHTML = 
+                                                  `<img src="${event.target.result}" class="img-thumbnail" style="max-width: 150px; max-height: 150px;">`;
+                                              }
+                                              reader.readAsDataURL(this.files[0]);
+
+                                              // Handle AJAX upload
+                                              const formData = new FormData();
+                                              formData.append('profilePhoto', this.files[0]);
+                                              formData.append('_csrf', '<%= csrfToken %>');
+
+                                              $('.upload-progress').show();
+                                              
+                                              $.ajax({
+                                                url: '/manager/update-profile',
+                                                type: 'POST',
+                                                data: formData,
+                                                processData: false,
+                                                contentType: false,
+                                                headers: {
+                                                  'X-CSRF-Token': '<%= csrfToken %>'
+                                                },
+                                                xhr: function() {
+                                                  const xhr = new XMLHttpRequest();
+                                                  xhr.upload.addEventListener('progress', function(e) {
+                                                    if (e.lengthComputable) {
+                                                      const percent = Math.round((e.loaded / e.total) * 100);
+                                                      $('.progress-bar').css('width', percent + '%');
+                                                    }
+                                                  }, false);
+                                                  return xhr;
+                                                },
+                                                success: function(response) {
+                                                  if (response.success && response.imagePath) {
+                                                    location.reload();
+                                                  } else {
+                                                    $('.upload-progress').hide();
+                                                  }
+                                                },
+                                                error: function(xhr) {
+                                                  alert('Upload failed: ' + xhr.responseText);
+                                                  $('.upload-progress').hide();
+                                                }
+                                              });
+                                            }
+                                          });
+                                        </script>
+                                        
+                                        <h4>Job Information</h4>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Job Title:</div>
+                                          <div class="form-fields">
+                                            <input type="text" class="form-control" name="position" value="<%= employee.position %>" required>
+                                            <div class="invalid-feedback">Please provide a job position</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Job ID:</div>
+                                          <div class="form-fields">
+                                            <input type="text" class="form-control" name="jobId" value="<%= employee.jobId %>" required 
+                                              pattern="[A-Za-z]{2,3}\d{3}" title="2-3 letters followed by 3 digits (e.g. ADM001 or PM001)" readonly>
+                                            <div class="invalid-feedback">Please provide a valid job ID (2-3 letters + 3 digits)</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Supervisor:</div>
+                                          <div class="form-fields">
+                                            <select class="form-control" name="supervisor">
+                                              <option value="" <%= !employee.supervisor ? 'selected' : '' %>>None</option>
+                                              <% supervisors.forEach(function(supervisor) { %>
+                                                <option value="<%= supervisor._id %>" 
+                                                  <%= employee.supervisor && employee.supervisor.toString() === supervisor._id.toString() ? 'selected' : '' %>>
+                                                  <%= supervisor.name %> (<%= supervisor.type %>)
+                                                </option>
+                                              <% }); %>
+                                            </select>
+                                            <div class="invalid-feedback">Please select a supervisor</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Department:</div>
+                                          <div class="form-fields">
+                                            <input type="text" class="form-control" name="department" value="<%= employee.department %>" required>
+                                            <div class="invalid-feedback">Please provide a department</div>
+                                          </div>
+                                        </div>
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Start date:</div>
+                                          <div class="form-fields">
+                                            <input type="date" class="form-control" name="startDate" value="<%= employee.startDate ? employee.startDate.toISOString().split('T')[0] : '' %>" readonly>
+                                            <div class="invalid-feedback">Please provide a valid start date</div>
+                                          </div>
+                                        </div>
+                                        
+                                        
+                                        <div class="form-row">
+                                          <div class="form-label">Work Experience:</div>
+                                          <div class="form-fields radio-group">
+                                            <div class="radio-option">
+                                              <input type="radio" id="expMid" name="workExperience" value="Fresher" <%= employee.workExperience === 'Fresher' ? 'checked' : '' %>>
+                                              <label for="expMid">Fresher</label>
+                                            </div>
+                                            <div class="radio-option">
+                                              <input type="radio" id="expJunior" name="workExperience" value="Junior" <%= employee.workExperience === 'Junior' ? 'checked' : '' %>>
+                                              <label for="expJunior">Junior</label>
+                                            </div>
+                        
+                                            <div class="radio-option">
+                                              <input type="radio" id="expSenior" name="workExperience" value="Senior" <%= employee.workExperience === 'Senior' ? 'checked' : '' %>>
+                                              <label for="expSenior">Senior</label>
+                                            </div>
+                                          </div>
+                                          <div class="invalid-feedback" style="width: 100%;">Please select work experience level</div>
+                                        </div>
+                                      </div>
+                                    </div>                                   
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js" charset="UTF-8"></script>
+        <script src="/javascripts/sidebar_menu.js"></script>
+    </body>
+    <script>
+    $(document).ready(function() {
+        // Client-side validation
+        function validateForm() {
+            let isValid = true;
+            
+            // Validate required fields
+            $('.form-control[required]').each(function() {
+                if (!$(this).val()) {
+                    $(this).addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+
+            // Validate phone number format
+            const phoneInput = $('input[name="contactNumber"]');
+            if (phoneInput.val() && !phoneInput.val().match(/^(0|\+84)\d{9,10}$/)) {
+                phoneInput.addClass('is-invalid');
+                isValid = false;
+            }
+
+            // Validate ID number format
+            const idInput = $('input[name="idNumber"]');
+            if (idInput.val() && !idInput.val().match(/^\d{12}$/)) {
+                idInput.addClass('is-invalid');
+                isValid = false;
+            }
+
+            // Validate job ID format
+            const jobIdInput = $('input[name="jobId"]');
+            if (jobIdInput.val() && !jobIdInput.val().match(/^[A-Za-z]{2,3}\d{3}$/)) {
+                jobIdInput.addClass('is-invalid');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Add input validation on blur
+        $('.form-control').on('blur', function() {
+            if ($(this).is('[required]') && !$(this).val()) {
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+
+        $('#profileForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                $('#saveMessage').removeClass('alert-success').addClass('alert-danger')
+                    .text('Please correct the highlighted fields').fadeIn();
+                setTimeout(() => $('#saveMessage').fadeOut(), 5000);
+                return;
+            }
+            
+            const formData = new FormData(this);
+            $('#saveBtn').prop('disabled', true).text('Saving...');
+            
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-Token': '<%= csrfToken %>'
+                },
+                success: function(response) {
+                    if(response.success) {
+                        $('#saveMessage').removeClass('alert-danger').addClass('alert-success')
+                            .text(response.message).fadeIn();
+                        setTimeout(() => $('#saveMessage').fadeOut(), 5000);
+                    }
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Error saving profile';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.error) {
+                            errorMsg = response.error;
+                        } else if (response.message) {
+                            errorMsg = response.message;
+                        }
+                    } catch (e) {
+                        console.error('Error parsing response:', e);
+                    }
+                    
+                    $('#saveMessage').removeClass('alert-success').addClass('alert-danger')
+                        .text(errorMsg).fadeIn();
+                    setTimeout(() => $('#saveMessage').fadeOut(), 5000);
+                },
+                complete: function() {
+                    $('#saveBtn').prop('disabled', false).text('Save Changes');
+                }
+            });
+        });
+    });
+    </script>
+</html>

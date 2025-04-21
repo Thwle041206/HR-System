@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/header') %>
+
+    <body>
+        <nav class="navbar navbar-default no-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+
+            <div class="navbar-header fixed-brand">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" id="menu-toggle">
+                    <span class="glyphicon glyphicon-th-large" style="margin-left:5px;" aria-hidden="true"></span>
+                </button>
+                <a class="navbar-brand" href="#"><i class="fa fa-a fa-4"></i>
+                    <%= userName %>
+                </a>
+            </div><!-- navbar-header-->
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"><span
+                                class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button>
+                    </li>
+                    <li class="navbar-brand">
+                        <form action="/logout" method="get">
+                            <button id="logout" type="submit" style="margin-top: -3px;" class="btn btn-default"><i
+                                    class="fa fa-user" aria-hidden="true"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div><!-- bs-example-navbar-collapse-1 -->
+        </nav>
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+                    <li>
+                        <a href="/admin/"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-tachometer fa-stack-1x "></i></span> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="/admin/view-all-employees"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-users fa-stack-1x "></i></span> View Employees</a>
+                    </li>
+                    <li>
+                        <a href="/admin/leave-applications"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-envelope-square fa-stack-1x "></i></span> Leave Applications</a>
+                    </li>
+                    <li class="active">
+                        <a href="/admin/view-profile"><span class="fa-stack fa-lg pull-left"><i
+                                    class="fa fa-user fa-stack-1x "></i></span> View Profile</a>
+                    </li>
+                </ul>
+            </div><!-- /#sidebar-wrapper -->
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid xyz">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="menu1">
+                                <div class="profile-header" style="display: flex; align-items: center; margin-bottom: 20px;">
+                                  <div class="profile-photo" style="margin-right: 20px;">
+                                    <% if (employee.profileImage) { %>
+                                      <img src="<%= employee.profileImage %>?t=<%= Date.now() %>" alt="Profile Photo" class="img-thumbnail" style="width: 150px; height: 150px;">
+                                    <% } else { %>
+                                      <i class="fa fa-user fa-5x" style="color: #ccc;"></i>
+                                    <% } %>
+                                  </div>
+                                  <div>
+                                    <h1>Profile</h1>
+                                  </div>
+                                </div>
+                                <div id="viewMode">
+                                <form class="form-group-sm">
+                                    <h4>Name : <label id="name">
+                                            <%= employee.name %>
+                                        </label></h4>
+                                    <h4>Email : <label id="type">
+                                            <%= employee.email %>
+                                        </label></h4>
+                                    <h4>Date of Birth : <label id="dob">
+                                            <%= moment(employee.dateOfBirth).format('MMMM Do YYYY') %>
+                                        </label></h4>
+                                        <a href="/admin/edit-profile" class="btn btn-primary">
+                                            <i class="fas fa-edit"></i> Edit Profile
+                                          </a>
+                                    <h4>Department : <label id="department">
+                                            <% if(!employee.department){%>
+                                                <%="N /A"%>
+                                                    <% } else{%>
+                                                        <%=employee.department%>
+                                                            <%}%>
+                                        </label></h4>
+                                    <h4>Designation : <label id="designation">
+                                            <% if(!employee.designation){%>
+                                                <%="N /A"%>
+                                                    <% } else{%>
+                                                        <%=employee.designation%>
+                                                            <%}%>
+                                        </label></h4>
+                                </form>
+                                </div>
+                                <div id="editMode" style="display:none;">
+                                  <form class="form-group-sm" method="post" action="/admin/update-profile">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label>First Name:</label>
+                                          <input type="text" class="form-control" name="firstName" value="<%= employee.firstName %>" required>
+                                          <small class="text-muted">Letters only, max 50 characters</small>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Last Name:</label>
+                                          <input type="text" class="form-control" name="lastName" value="<%= employee.lastName %>" required>
+                                          <small class="text-muted">Letters only, max 50 characters</small>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Job ID:</label>
+                                          <input type="text" class="form-control" name="jobId" value="<%= employee.jobId %>" required 
+                                            pattern="[A-Za-z]{2,3}\d{3}" title="2-3 letters followed by 3 digits (e.g. ADM001 or PM001)">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>ID Number:</label>
+                                          <input type="text" class="form-control" name="idNumber" value="<%= employee.idNumber %>" required
+                                            pattern="\d{12}" title="12 digit ID number">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Date of Birth:</label>
+                                          <input type="date" class="form-control" name="dateOfBirth" value="<%= employee.dateOfBirth.toISOString().split('T')[0] %>" required>
+                                        </div>
+                                      </div>
+                                      
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label>Gender:</label>
+                                          <select class="form-control" name="gender" required>
+                                            <option value="Male" <%= employee.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                                            <option value="Female" <%= employee.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Contact Number:</label>
+                                          <input type="tel" class="form-control" name="contactNumber" value="<%= employee.contactNumber %>" required
+                                            pattern="(0|\+84)\d{9,10}" title="Vietnamese phone number format">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Personal Email:</label>
+                                          <input type="email" class="form-control" name="personalEmail" value="<%= employee.personalEmail || '' %>">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Birthplace City:</label>
+                                          <input type="text" class="form-control" name="birthplace[city]" value="<%= employee.birthplace.city %>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Position:</label>
+                                          <input type="text" class="form-control" name="position" value="<%= employee.position %>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Department:</label>
+                                          <input type="text" class="form-control" name="department" value="<%= employee.department %>" required>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <h4>Address Information</h4>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="form-group">
+                                          <label for="addressCitySelect">City:</label>
+                                          <select id="addressCitySelect" class="form-control" name="address[city]" required>
+                                            <option value="">Select City</option>
+                                            <!-- Options will be populated by JS -->
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="form-group">
+                                          <label for="addressDistrictSelect">District:</label>
+                                          <select id="addressDistrictSelect" class="form-control" name="address[district]" required>
+                                             <option value="">Select District</option>
+                                             <!-- Options will be populated by JS -->
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="form-group">
+                                          <label>Details:</label>
+                                          <input type="text" class="form-control" name="address[details]" value="<%= employee.address.details %>" required>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                      <button type="submit" class="btn btn-success">Save</button>
+                                      <button type="button" id="cancelEditBtn" class="btn btn-default">Cancel</button>
+                                    </div>
+                                  </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.js" charset="UTF-8"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js" charset="UTF-8"></script>
+
+
+        <script src="/javascripts/sidebar_menu.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#editProfileBtn').click(function(e) {
+                    e.preventDefault();
+                    console.log('Edit button clicked');
+                    $('#viewMode').hide();
+                    $('#editMode').show();
+                });
+                
+                $('#cancelEditBtn').click(function(e) {
+                    e.preventDefault();
+                    console.log('Cancel button clicked');
+                    $('#editMode').hide();
+                    $('#viewMode').show();
+                });
+                for (i = new Date().getFullYear(); i > 1900; i--) {
+                    $('#year').append($('<option />').val(i).html(i));
+                }
+                
+                // Fix active menu state on all modals
+                // This script runs after sidebar_menu.js and fixes the active state issues
+                // Maintain correct active item 
+                $('#menu li').removeClass('active');
+                $('#menu li:eq(6)').addClass('active'); // View Profile is active
+                
+                // Remove all click handlers from menu items with modal triggers
+                $('a[onclick*="modal"]').off('click');
+                
+                // Fix modals messing with active states
+                $('.modal').on('show.bs.modal hide.bs.modal', function (e) {
+                    // Force View Profile to remain active regardless of modal state
+                    setTimeout(function() {
+                        $('#menu li').removeClass('active');
+                        $('#menu li:eq(6)').addClass('active');
+                    }, 50);
+                });
+
+                // --- Address API Integration ---
+                const citySelect = $('#addressCitySelect');
+                const districtSelect = $('#addressDistrictSelect');
+                // Get current values safely, handling cases where address might be null/undefined
+                const currentCity = "<%= employee.address && employee.address.city ? employee.address.city.trim() : '' %>";
+                const currentDistrict = "<%= employee.address && employee.address.district ? employee.address.district.trim() : '' %>";
+                let cityApiData = []; // Store city data including codes
+
+                console.log("Current City:", currentCity);
+                console.log("Current District:", currentDistrict);
+
+                function populateDistricts(cityCode, selectedDistrict) {
+                    districtSelect.html('<option value="">Loading Districts...</option>').prop('disabled', true);
+                    if (!cityCode) {
+                         districtSelect.html('<option value="">Select City First</option>').prop('disabled', true);
+                         return;
+                    }
+                    console.log(`Fetching districts for city code: ${cityCode}`);
+                    // Corrected API URL for districts
+                    fetch(`https://provinces.open-api.vn/api/p/${cityCode}?depth=2`) 
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                         })
+                        .then(data => {
+                            districtSelect.html('<option value="">Select District</option>'); // Clear loading/default
+                            if (data && data.districts && data.districts.length > 0) {
+                                console.log(`Found ${data.districts.length} districts.`);
+                                data.districts.forEach(district => {
+                                    const option = $('<option></option>')
+                                        .val(district.name.trim()) // Use name as value, trim whitespace
+                                        .text(district.name);
+                                    // Trim comparison values
+                                    if (district.name.trim() === selectedDistrict) {
+                                        console.log(`Selecting district: ${district.name}`);
+                                        option.prop('selected', true);
+                                    }
+                                    districtSelect.append(option);
+                                });
+                            } else {
+                                console.warn("No districts found or empty array for city code:", cityCode, data);
+                                districtSelect.html('<option value="">No Districts Found</option>');
+                            }
+                             districtSelect.prop('disabled', false);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching districts:', error);
+                            districtSelect.html('<option value="">Error Loading Districts</option>').prop('disabled', true);
+                        });
+                }
+
+                // Fetch cities on load with error handling
+                console.log("Attempting to fetch cities from API...");
+                // Corrected API URL for provinces/cities with fallback
+                const cityApiUrl = 'https://provinces.open-api.vn/api/p/';
+                const fallbackCities = [
+                  { name: 'Hà Nội', code: '01' },
+                  { name: 'Hồ Chí Minh', code: '79' },
+                  { name: 'Đà Nẵng', code: '48' }
+                ];
+                
+                fetch(cityApiUrl)
+                    .then(response => {
+                        console.log("Received response from city API. Status:", response.status);
+                        if (!response.ok) {
+                            console.error("City API response was not OK:", response.status, response.statusText);
+                            // Attempt to read response body even on error for more details
+                            return response.text().then(text => {
+                                console.error("Error response body:", text);
+                                throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+                            });
+                        }
+                        console.log("City API response OK. Parsing JSON...");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Successfully parsed city JSON data:", data);
+                        cityApiData = data; // Store for later use
+                        citySelect.html('<option value="">Select City</option>'); // Clear loading/default
+                        let initialCityCode = null;
+                        if (cityApiData && Array.isArray(cityApiData) && cityApiData.length > 0) {
+                             console.log(`Found ${cityApiData.length} cities.`);
+                            cityApiData.forEach(city => {
+                                const option = $('<option></option>')
+                                    .val(city.name.trim()) // Use name as value, trim whitespace
+                                    .text(city.name)
+                                    .data('code', city.code); // Store code in data attribute
+                                
+                                // Trim comparison values
+                                if (city.name.trim() === currentCity) {
+                                    console.log(`Selecting city: ${city.name} (Code: ${city.code})`);
+                                    option.prop('selected', true);
+                                    initialCityCode = city.code; // Store code for initial district load
+                                }
+                                citySelect.append(option);
+                            });
+
+                            // If an initial city was selected, load its districts
+                            if(initialCityCode) {
+                                console.log(`Initial city code found: ${initialCityCode}. Populating districts...`);
+                                populateDistricts(initialCityCode, currentDistrict);
+                            } else {
+                                console.log("No initial city matched. Disabling district select.");
+                                districtSelect.prop('disabled', true); // Disable districts if no city selected initially
+                            }
+
+                        } else {
+                             console.warn("No cities found or data is not an array:", cityApiData);
+                             citySelect.html('<option value="">No Cities Found</option>');
+                             districtSelect.prop('disabled', true);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching cities:', error);
+                        // Use fallback cities if API fails
+                        cityApiData = fallbackCities;
+                        citySelect.html('<option value="">Select City</option>');
+                        
+                        fallbackCities.forEach(city => {
+                            const option = $('<option></option>')
+                                .val(city.name.trim())
+                                .text(city.name)
+                                .data('code', city.code);
+                                
+                            if (city.name.trim() === currentCity) {
+                                option.prop('selected', true);
+                                populateDistricts(city.code, currentDistrict);
+                            }
+                            citySelect.append(option);
+                        });
+                        
+                        if (!currentCity) {
+                            districtSelect.prop('disabled', true);
+                        }
+                    });
+
+                // Add change listener to city dropdown
+                citySelect.on('change', function() {
+                    const selectedOption = $(this).find('option:selected');
+                    const cityCode = selectedOption.data('code');
+                    const selectedCityName = $(this).val();
+                    
+                    console.log(`City changed. Selected: ${selectedCityName}, Code: ${cityCode}`);
+                    
+                    if (!cityCode) {
+                        districtSelect.html('<option value="">Select City First</option>').prop('disabled', true);
+                        return;
+                    }
+                    
+                    populateDistricts(cityCode, null);
+                });
+
+                // Add form validation before submission
+                $('form').on('submit', function(e) {
+                    // Only validate if address fields have some values
+                    if ((citySelect.val() || districtSelect.val()) && 
+                        (!citySelect.val() || !districtSelect.val())) {
+                        e.preventDefault();
+                        alert('Please select both city and district if providing address information');
+                        return false;
+                    }
+                    return true;
+                });
+
+            });
+        </script>
+    </body>
+</html>
